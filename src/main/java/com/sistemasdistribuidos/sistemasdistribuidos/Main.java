@@ -5,13 +5,19 @@
  */
 package com.sistemasdistribuidos.sistemasdistribuidos;
 
+import java.io.IOException;
+
 /**
  *
  * @author a1562339
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        ThreadMulticastReceive tmr = new ThreadMulticastReceive("224.42.42.42",6789);
+        tmr.start();
         
+        ThreadMulticastSend tms = new ThreadMulticastSend("224.42.42.42",6789);
+        tms.start();
     }
     
 }
