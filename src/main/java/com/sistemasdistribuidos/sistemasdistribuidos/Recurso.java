@@ -53,4 +53,5 @@ public class Recurso {
     public synchronized void setMensagem(String msgm){
         this.mensagem = msgm;
     }
+
 }

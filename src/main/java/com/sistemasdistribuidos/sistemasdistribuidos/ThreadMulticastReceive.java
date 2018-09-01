@@ -17,15 +17,16 @@ import java.util.logging.Logger;
  * @author Marlon
  */
 public class ThreadMulticastReceive extends Thread {
-    
-    
+
     MulticastSocket ms = null;
     InetAddress group = null;
     String nomeProcesso = "";
     Recurso r;
-    
+    Integer counter;
+
     public ThreadMulticastReceive(Recurso r) throws IOException {
         this.r = r;
+        this.counter = 1;
         nomeProcesso = r.nomeProcesso;
         group = InetAddress.getByName(r.ipAddress);
         ms = new MulticastSocket(r.port);
@@ -37,35 +38,63 @@ public class ThreadMulticastReceive extends Thread {
         byte[] buffer = new byte[1000];
         String mensagem = "";
         String[] decode;
-        do {           
+        do {
             if (!r.getMensagem().isEmpty()) {
                 System.out.println("Rm: " + r.getMensagem());
 
                 decode = r.getMensagem().split(":");
                 if (decode[1].startsWith("apresentacao")) {
-                    if (decode[0].startsWith(nomeProcesso)) {
-                        r.setlistaProcessos(decode[0]);
+                    if (!decode[0].startsWith(nomeProcesso)) {
+                        if (!r.getlistaProcessos().contains(decode[0])) {
+                            r.setlistaProcessos(decode[0]);
+                        }
                     }
                     r.setMensagem("");
+                } else if (decode[1].startsWith("getRecurso1")) {
+                    if (!decode[0].startsWith(nomeProcesso)) {
+                        if (r.getRecurso1()) {
+                            r.setMensagem(nomeProcesso + ":Recurso1Ocupado");
+                        } else {
+                            r.setMensagem(nomeProcesso + ":Recurso1Livre");
+                        }
+                    }
+                } else if (decode[1].startsWith("getRecurso2")) {
+                    if (!decode[0].startsWith(nomeProcesso)) {
+                        if (r.getRecurso1()) {
+                            r.setMensagem(nomeProcesso + ":Recurso2Ocupado");
+                        } else {
+                            r.setMensagem(nomeProcesso + ":Recurso2Livre");
+                        }
+                    }
+                } else if (decode[1].startsWith("Recurso1Livre")) {
+                    if (!decode[0].startsWith(nomeProcesso)) {
+                        if (counter == r.getlistaProcessos().size()) {
+                            r.setRecurso2(true);
+                            r.setMensagem(nomeProcesso + ":Recurso1Ocupado");
+                        } else {
+                            this.counter++;
+                        }
+                    }
+                } else if (decode[1].startsWith("Recurso2Livre")) {
+                    if (!decode[0].startsWith(nomeProcesso)) {
+                        if (counter == r.getlistaProcessos().size()) {
+                            r.setRecurso2(true);
+                            r.setMensagem(nomeProcesso + ":Recurso2Ocupado");
+                        } else {
+                            this.counter++;
+                        }
+                    }
                 }
             }
-            DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);            
-            try {                
+            DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+            try {
                 ms.receive(messageIn);
                 mensagem = new String(messageIn.getData());
-//                decode = mensagem.split(":");
-//                if(decode[1] != null){
-//                if(decode[1].startsWith("apresentacao")){
-//                    if(!decode[0].startsWith(nomeProcesso)){
-//                        r.setlistaProcessos(decode[0]);
-//                    }
-//                }
-//                }
             } catch (IOException e) {
                 System.out.println("" + e);
             }
 
-        }while(!mensagem.trim().equalsIgnoreCase("exit()"));
+        } while (!mensagem.trim().equalsIgnoreCase("exit()"));
         try {
             ms.leaveGroup(group);
         } catch (IOException ex) {
