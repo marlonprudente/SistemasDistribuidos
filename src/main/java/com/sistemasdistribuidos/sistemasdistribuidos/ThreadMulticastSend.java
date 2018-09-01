@@ -20,11 +20,9 @@ public class ThreadMulticastSend extends Thread {
     MulticastSocket ms = null;
     InetAddress group = null;
     String nomeProcesso = "";
-    boolean enviarMensagem = false;
     
-    public ThreadMulticastSend(String IPAddress, Integer port, String processoNome, boolean enviar) throws IOException {
+    public ThreadMulticastSend(String IPAddress, Integer port, String processoNome) throws IOException {
         nomeProcesso = processoNome;
-        enviarMensagem = enviar;
         group = InetAddress.getByName(IPAddress);
         ms = new MulticastSocket(port);
         ms.joinGroup(group);
@@ -33,15 +31,10 @@ public class ThreadMulticastSend extends Thread {
     @Override
     public void run() {
         Scanner scan = new Scanner(System.in);
-        String mensagem = "";
-        while (!mensagem.equals("exit()")) {
-            //System.out.println(nomeProcesso + "=> Digite:");
+        String mensagem ;
+        do {            
+            System.out.println(nomeProcesso.toUpperCase() + "> Digite:");
             mensagem = scan.nextLine();
-            if(enviarMensagem){
-                mensagem = "flagMensagemAlterada";
-                enviarMensagem = false;
-            }
-                
             byte[] m = mensagem.getBytes();
             DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
             try {                
@@ -49,7 +42,7 @@ public class ThreadMulticastSend extends Thread {
             } catch (IOException ex) {
                 System.out.println("Erro: " + ex);
             }
-        }
+        }while (!mensagem.trim().equalsIgnoreCase("exit()"));
         try {
             scan.close();
             ms.leaveGroup(group);
