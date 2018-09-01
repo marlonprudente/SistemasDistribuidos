@@ -46,6 +46,9 @@ public class Recurso {
     public void setlistaProcessos(String processo){
         listaProcessos.add(processo);
     }
+    public void removeListaProcesso(String processo){
+        listaProcessos.remove(processo);
+    }
     
     public synchronized String getMensagem(){
         return mensagem;

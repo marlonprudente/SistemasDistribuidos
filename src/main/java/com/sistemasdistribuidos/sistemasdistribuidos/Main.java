@@ -21,7 +21,7 @@ public class Main {
         Integer op;
         String ipAddress = "224.42.42.42";
         Integer port = 6789;
-        String nomeProcesso = "Process2";
+        String nomeProcesso = "Process1";
 
         Recurso r = new Recurso(ipAddress, port, nomeProcesso);
         r.setMensagem(nomeProcesso + ":apresentacao");
@@ -54,7 +54,7 @@ public class Main {
                     }
                     break;
                 case 6:
-                    r.setMensagem("exit()");
+                    r.setMensagem(nomeProcesso + ":exit()");
                     break;
                 default:
                     System.out.println("Opção Inválida");

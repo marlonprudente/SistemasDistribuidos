@@ -35,15 +35,15 @@ public class ThreadMulticastSend extends Thread {
         
         String mensagem  = "";
         do {
-            if (!r.getMensagem().isEmpty()) {
-                mensagem = r.getMensagem();
-                //r.setMensagem("");
+            if (!r.getMensagem().startsWith("")) {
+                System.out.println("Sm: " + r.getMensagem());
+                //mensagem = r.getMensagem();
+                r.setMensagem("");
             }
             byte[] m = mensagem.getBytes();
             DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
             try {
                 ms.send(messageOut);
-                mensagem = r.getMensagem();
             } catch (IOException ex) {
                 System.out.println("Erro: " + ex);
             }
