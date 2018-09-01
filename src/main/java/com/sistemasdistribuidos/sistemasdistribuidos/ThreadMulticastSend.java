@@ -32,15 +32,16 @@ public class ThreadMulticastSend extends Thread {
 
     @Override
     public void run() {
-        Scanner scan = new Scanner(System.in);
-        String mensagem ;
-        mensagem = nomeProcesso + ":apresentacao";
+        
+        String mensagem  = "";
         do {
-            //System.out.println(nomeProcesso.toUpperCase() + "> Digite:");
-            //mensagem = scan.nextLine();
+            if (!r.getMensagem().isEmpty()) {
+                mensagem = r.getMensagem();
+                //r.setMensagem("");
+            }
             byte[] m = mensagem.getBytes();
             DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
-            try {                
+            try {
                 ms.send(messageOut);
                 mensagem = r.getMensagem();
             } catch (IOException ex) {
@@ -48,7 +49,6 @@ public class ThreadMulticastSend extends Thread {
             }
         }while (!mensagem.trim().equalsIgnoreCase("exit()"));
         try {
-            scan.close();
             ms.leaveGroup(group);
         } catch (IOException ex) {
             System.out.println("Erro: " + ex);

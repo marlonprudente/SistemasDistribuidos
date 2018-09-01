@@ -37,22 +37,34 @@ public class ThreadMulticastReceive extends Thread {
         byte[] buffer = new byte[1000];
         String mensagem = "";
         String[] decode;
-        do {
-            DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+        do {           
+            if (!r.getMensagem().isEmpty()) {
+                System.out.println("Rm: " + r.getMensagem());
+
+                decode = r.getMensagem().split(":");
+                if (decode[1].startsWith("apresentacao")) {
+                    if (decode[0].startsWith(nomeProcesso)) {
+                        r.setlistaProcessos(decode[0]);
+                    }
+                    r.setMensagem("");
+                }
+            }
+            DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);            
             try {                
                 ms.receive(messageIn);
                 mensagem = new String(messageIn.getData());
-                decode = mensagem.split(":");
-                if(decode[1].startsWith("apresentacao")){
-                    if(!decode[0].startsWith(nomeProcesso)){
-                        r.setlistaProcessos(decode[0]);
-                    }
-                }
-                //System.out.println("Received: " + mensagem);                
+//                decode = mensagem.split(":");
+//                if(decode[1] != null){
+//                if(decode[1].startsWith("apresentacao")){
+//                    if(!decode[0].startsWith(nomeProcesso)){
+//                        r.setlistaProcessos(decode[0]);
+//                    }
+//                }
+//                }
             } catch (IOException e) {
                 System.out.println("" + e);
             }
-            r.setMensagem("");
+
         }while(!mensagem.trim().equalsIgnoreCase("exit()"));
         try {
             ms.leaveGroup(group);
