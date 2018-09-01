@@ -34,13 +34,15 @@ public class ThreadMulticastSend extends Thread {
     public void run() {
         Scanner scan = new Scanner(System.in);
         String mensagem ;
+        mensagem = nomeProcesso + ":apresentacao";
         do {
-            System.out.println(nomeProcesso.toUpperCase() + "> Digite:");
-            mensagem = scan.nextLine();
+            //System.out.println(nomeProcesso.toUpperCase() + "> Digite:");
+            //mensagem = scan.nextLine();
             byte[] m = mensagem.getBytes();
             DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
             try {                
                 ms.send(messageOut);
+                mensagem = r.getMensagem();
             } catch (IOException ex) {
                 System.out.println("Erro: " + ex);
             }
