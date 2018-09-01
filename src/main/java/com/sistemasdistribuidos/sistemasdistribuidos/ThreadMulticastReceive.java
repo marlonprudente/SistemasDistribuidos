@@ -22,17 +22,13 @@ public class ThreadMulticastReceive extends Thread {
     MulticastSocket ms = null;
     InetAddress group = null;
     String nomeProcesso = "";
-    String msgm = "";
-    Recurso recursoCompartilhado = null;    
-    boolean rec1 = false;
-    boolean rec2 = false;
-
-    public ThreadMulticastReceive(String IPAddress, Integer port, String processoNome) throws IOException {
-        nomeProcesso = processoNome;
-        //recursoCompartilhado = recurso;
-        //msgm = recurso;
-        group = InetAddress.getByName(IPAddress);
-        ms = new MulticastSocket(port);
+    Recurso r;
+    
+    public ThreadMulticastReceive(Recurso r) throws IOException {
+        this.r = r;
+        nomeProcesso = r.nomeProcesso;
+        group = InetAddress.getByName(r.ipAddress);
+        ms = new MulticastSocket(r.port);
         ms.joinGroup(group);
     }
 
@@ -44,8 +40,8 @@ public class ThreadMulticastReceive extends Thread {
             DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
             try {                
                 ms.receive(messageIn);
-                mensagem = new String(messageIn.getData());
-                System.out.println("Received: " + mensagem);
+                mensagem = new String(messageIn.getData());                
+                System.out.println("Received: " + mensagem);                
             } catch (IOException e) {
                 System.out.println("" + e);
             }

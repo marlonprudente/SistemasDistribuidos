@@ -13,11 +13,19 @@ import java.util.List;
  * @author Marlon
  */
 public class Recurso {
-
-    private volatile boolean recurso1 = false;
-    private volatile boolean recurso2 = false;
-    private volatile List<String> listaProcessos = new ArrayList<String>();
-    private volatile String mensagem = "";
+    public String ipAddress;
+    public Integer port;
+    public String nomeProcesso;
+    private boolean recurso1 = false;
+    private boolean recurso2 = false;
+    private final List<String> listaProcessos = new ArrayList<>();
+    private String mensagem = ""; 
+    
+    public Recurso(String ip, Integer porta, String nome){
+        this.ipAddress = ip;
+        this.port = porta;
+        this.nomeProcesso = nome;
+    }
     
     public boolean getRecurso1() {
         return recurso1;
@@ -39,12 +47,10 @@ public class Recurso {
         listaProcessos.add(processo);
     }
     
-    public String getMensagem(){
-        return this.mensagem;
+    public synchronized String getMensagem(){
+        return mensagem;
     }
-    public void setMensagem(String msgm){
-        System.out.println("mensagem " + msgm);
+    public synchronized void setMensagem(String msgm){
         this.mensagem = msgm;
-         System.out.println("mensagem " + mensagem);
     }
 }

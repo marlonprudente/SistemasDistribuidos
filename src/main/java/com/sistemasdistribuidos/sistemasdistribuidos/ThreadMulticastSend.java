@@ -20,11 +20,13 @@ public class ThreadMulticastSend extends Thread {
     MulticastSocket ms = null;
     InetAddress group = null;
     String nomeProcesso = "";
+    Recurso r;
     
-    public ThreadMulticastSend(String IPAddress, Integer port, String processoNome) throws IOException {
-        nomeProcesso = processoNome;
-        group = InetAddress.getByName(IPAddress);
-        ms = new MulticastSocket(port);
+    public ThreadMulticastSend(Recurso r) throws IOException {
+        this.r = r;
+        nomeProcesso = r.nomeProcesso;
+        group = InetAddress.getByName(r.ipAddress);
+        ms = new MulticastSocket(r.port);
         ms.joinGroup(group);
     }
 
@@ -32,7 +34,7 @@ public class ThreadMulticastSend extends Thread {
     public void run() {
         Scanner scan = new Scanner(System.in);
         String mensagem ;
-        do {            
+        do {
             System.out.println(nomeProcesso.toUpperCase() + "> Digite:");
             mensagem = scan.nextLine();
             byte[] m = mensagem.getBytes();
