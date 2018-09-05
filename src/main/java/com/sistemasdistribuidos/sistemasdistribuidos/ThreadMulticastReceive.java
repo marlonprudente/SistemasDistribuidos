@@ -37,69 +37,14 @@ public class ThreadMulticastReceive extends Thread {
     public void run() {
         byte[] buffer = new byte[1000];
         String mensagem = "";
-        String[] decode;
         do {
-            if (!r.getMensagem().startsWith("")) {
-                System.out.println("Rm: " + r.getMensagem());
-                decode = r.getMensagem().split(":");
-                r.setMensagem("");
-                if (!decode[0].isEmpty()) {
-                    if (decode[1].startsWith("apresentacao")) {
-                        if (!decode[0].startsWith(nomeProcesso)) {
-                            if (!r.getlistaProcessos().contains(decode[0])) {
-                                r.setlistaProcessos(decode[0]);
-                            }
-                        }
-                    } else if (decode[1].startsWith("getRecurso1")) {
-                        if (!decode[0].startsWith(nomeProcesso)) {
-                            if (r.getRecurso1()) {
-                                r.setMensagem(nomeProcesso + ":Recurso1Ocupado");
-                            } else {
-                                r.setMensagem(nomeProcesso + ":Recurso1Livre");
-                            }
-                        }
-                    } else if (decode[1].startsWith("getRecurso2")) {
-                        if (!decode[0].startsWith(nomeProcesso)) {
-                            if (r.getRecurso1()) {
-                                r.setMensagem(nomeProcesso + ":Recurso2Ocupado");
-                            } else {
-                                r.setMensagem(nomeProcesso + ":Recurso2Livre");
-                            }
-                        }
-                    } else if (decode[1].startsWith("Recurso1Livre")) {
-                        if (!decode[0].startsWith(nomeProcesso)) {
-                            if (counter == r.getlistaProcessos().size()) {
-                                r.setRecurso2(true);
-                                r.setMensagem(nomeProcesso + ":Recurso1Ocupado");
-                            } else {
-                                this.counter++;
-                            }
-                        }
-                    } else if (decode[1].startsWith("Recurso2Livre")) {
-                        if (!decode[0].startsWith(nomeProcesso)) {
-                            if (counter == r.getlistaProcessos().size()) {
-                                r.setRecurso2(true);
-                                r.setMensagem(nomeProcesso + ":Recurso2Ocupado");
-                            } else {
-                                this.counter++;
-                            }
-                        }
-                    } else if (decode[1].startsWith("exit()")) {
-                        if (!decode[0].startsWith(nomeProcesso)) {
-                            r.removeListaProcesso(decode[0]);
-                        } else {
-                            mensagem = decode[0];
-                        }
-                    }
-                }
-            }
             DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
             try {
                 ms.receive(messageIn);
                 mensagem = new String(messageIn.getData());
-                if (!mensagem.isEmpty()) {
-                    r.setMensagem(mensagem);
-                }
+                System.out.println("Recebi: " + mensagem);
+                MessageManager mm = new MessageManager(r,mensagem);
+                mm.start();
             } catch (IOException e) {
                 System.out.println("" + e);
             }

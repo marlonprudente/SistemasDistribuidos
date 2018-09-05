@@ -7,6 +7,9 @@ package com.sistemasdistribuidos.sistemasdistribuidos;
 
 import java.io.IOException;
 import static java.lang.System.in;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,46 +24,74 @@ public class Main {
         Integer op;
         String ipAddress = "224.42.42.42";
         Integer port = 6789;
-        String nomeProcesso = "Process1";
+        String nomeProcesso = "Process3";
+        String mensagem = "apresentacao";
+        byte[] m;
+        MulticastSocket ms = null;
+        InetAddress group = null;
+        group = InetAddress.getByName(ipAddress);
+        ms = new MulticastSocket(port);
+        ms.joinGroup(group);
 
         Recurso r = new Recurso(ipAddress, port, nomeProcesso);
         r.setMensagem(nomeProcesso + ":apresentacao");
         ThreadMulticastReceive tmr = new ThreadMulticastReceive(r);
-        ThreadMulticastSend tms = new ThreadMulticastSend(r);
+//        ThreadMulticastSend tms = new ThreadMulticastSend(r);
 
         tmr.start();
-        tms.start();
-
+//        tms.start();
+        m = mensagem.getBytes();
+        boolean enviar = false;
         while (true) {
             System.out.println("Digite a opção desejada: ");
             op = scan.nextInt();
             switch (op) {
                 case 1:
-                    r.setMensagem(nomeProcesso + ":apresentacao");
+                    mensagem = nomeProcesso + ":apresentacao";
+                    m = mensagem.getBytes();
+                    enviar = true;
                     break;
                 case 2:
-                    r.setMensagem(nomeProcesso + ":getRecurso1");
+                    mensagem = nomeProcesso + ":getRecurso1";
+                    m = mensagem.getBytes();
+                    enviar = true;
                     break;
                 case 3:
-                    r.setMensagem(nomeProcesso + ":getRecurso2");
+                    mensagem = nomeProcesso + ":getRecurso2";
+                    m = mensagem.getBytes();
+                    enviar = true;
                     break;
                 case 4:
                     System.out.println(":>" + r.getMensagem());
                     break;
                 case 5:
                     List<String> lista = r.getlistaProcessos();
-                    for (String l : lista) {
+                    lista.forEach((l) -> {
                         System.out.println(":>" + l);
-                    }
+                    });
                     break;
                 case 6:
                     r.setMensagem(nomeProcesso + ":exit()");
+                    break;
+                case 7:
+                    mensagem = nomeProcesso + ":estouSaindo";
+                    m = mensagem.getBytes();
+                    enviar = true;
                     break;
                 default:
                     System.out.println("Opção Inválida");
 
             }
+            if (enviar) {
 
+                DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
+                try {
+                    ms.send(messageOut);
+                } catch (IOException ex) {
+                    System.out.println("Erro: " + ex);
+                }
+                enviar = false;
+            }
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package com.sistemasdistribuidos.sistemasdistribuidos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author Marlon
  */
-public class Recurso {
+public class Recurso implements Serializable{
     public String ipAddress;
     public Integer port;
     public String nomeProcesso;
@@ -44,7 +45,8 @@ public class Recurso {
         return listaProcessos;
     }
     public void setlistaProcessos(String processo){
-        listaProcessos.add(processo);
+        if(!listaProcessos.contains(processo) && !processo.equals(this.nomeProcesso))
+            listaProcessos.add(processo);
     }
     public void removeListaProcesso(String processo){
         listaProcessos.remove(processo);
