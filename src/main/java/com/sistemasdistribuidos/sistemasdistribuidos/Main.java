@@ -24,7 +24,7 @@ public class Main {
         Integer op;
         String ipAddress = "224.42.42.42";
         Integer port = 6789;
-        String nomeProcesso = "Process3";
+        String nomeProcesso = "Process1";
         String mensagem = "apresentacao";
         byte[] m;
         MulticastSocket ms = null;
@@ -53,11 +53,13 @@ public class Main {
                     break;
                 case 2:
                     mensagem = nomeProcesso + ":getRecurso1";
+                    r.setDesejoRecurso1(true);
                     m = mensagem.getBytes();
                     enviar = true;
                     break;
                 case 3:
                     mensagem = nomeProcesso + ":getRecurso2";
+                    r.setDesejoRecurso2(true);
                     m = mensagem.getBytes();
                     enviar = true;
                     break;
@@ -78,9 +80,16 @@ public class Main {
                     m = mensagem.getBytes();
                     enviar = true;
                     break;
+                case 8:
+                    System.out.println("Soltar Recurso1");
+                    r.setRecurso1(false);
+                    break;
+                case 9:
+                    System.out.println("Soltar Recurso2");
+                    r.setRecurso2(false);
+                    break;
                 default:
                     System.out.println("Opção Inválida");
-
             }
             if (enviar) {
 
