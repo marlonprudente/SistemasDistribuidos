@@ -26,6 +26,8 @@ public class Recurso implements Serializable {
     private boolean desejoRecurso2 = false;
     private final List<String> listaProcessos = new ArrayList<>();
     private final List<String> listaRespostas = new ArrayList<>();
+    private boolean threadRecurso1 = false;
+    private boolean threadRecurso2 = false;
     private final Map<String, Boolean> processosRecurso1 = new HashMap<String, Boolean>();
     private final Map<String, Boolean> processosRecurso2 = new HashMap<String, Boolean>();
     private String mensagem = "";
@@ -132,6 +134,22 @@ public class Recurso implements Serializable {
 
     public synchronized void setMensagem(String msgm) {
         this.mensagem = msgm;
+    }
+
+    public boolean getThreadRecurso1() {
+        return threadRecurso1;
+    }
+
+    public void setThreadRecurso1(boolean threadRecurso) {
+        threadRecurso1 = threadRecurso;
+    }
+
+    public boolean getThreadRecurso2() {
+        return threadRecurso2;
+    }
+
+    public void setThreadRecurso2(boolean threadRecurso) {
+        threadRecurso2 = threadRecurso;
     }
 
 }

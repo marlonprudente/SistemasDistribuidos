@@ -20,6 +20,11 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        /**
+         Inicializaçãoi das variáveis
+         * Todas as variáveis são iniciadas e alocadas no <b>"Recurso"</b> que é a variável
+         * que armazena todas as informações da aplicação.
+         */
         Scanner scan = new Scanner(System.in);
         Integer op;
         String ipAddress = "224.42.42.42";
@@ -32,16 +37,26 @@ public class Main {
         group = InetAddress.getByName(ipAddress);
         ms = new MulticastSocket(port);
         ms.joinGroup(group);
-
+        /**
+         * Recurso é onde se controla todas as variáveis.
+         */
         Recurso r = new Recurso(ipAddress, port, nomeProcesso);
+        /**
+         * Seta a mensagem inicial como apresentação.
+         */
         r.setMensagem(nomeProcesso + ":apresentacao");
+        /**
+         * Inicia a Thread que irá ficar escutando mensagens.
+         */
         ThreadMulticastReceive tmr = new ThreadMulticastReceive(r);
 //        ThreadMulticastSend tms = new ThreadMulticastSend(r);
-
-        tmr.start();
+        tmr.start();        
 //        tms.start();
+
+        //Variável que irá controlar as mensagens a serem enviadas.
         m = mensagem.getBytes();
-        boolean enviar = false;
+        boolean enviar = true;
+        //loop para teste de funcionalidades
         while (true) {
             System.out.println("Digite a opção desejada: ");
             op = scan.nextInt();
@@ -91,8 +106,9 @@ public class Main {
                 default:
                     System.out.println("Opção Inválida");
             }
+            
+            //Enviar mensagem via broadcast.
             if (enviar) {
-
                 DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
                 try {
                     ms.send(messageOut);

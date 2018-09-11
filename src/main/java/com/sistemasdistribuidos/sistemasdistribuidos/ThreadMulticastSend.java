@@ -21,7 +21,11 @@ public class ThreadMulticastSend extends Thread {
     InetAddress group = null;
     String nomeProcesso = "";
     Recurso r;
-    
+    /**
+     * @deprecated Não utilizo mais trhread para envio de mensagens
+     * @param r
+     * @throws IOException 
+     */
     public ThreadMulticastSend(Recurso r) throws IOException {
         this.r = r;
         nomeProcesso = r.nomeProcesso;

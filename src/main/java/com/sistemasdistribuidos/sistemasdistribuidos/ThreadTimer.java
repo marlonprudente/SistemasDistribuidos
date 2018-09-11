@@ -21,6 +21,7 @@ public class ThreadTimer extends Thread {
 
     public ThreadTimer(Recurso recurso) {
         this.r = recurso;
+        
         //create timer task to increment counter
         timerTask = new TimerTask() {
             @Override

@@ -19,14 +19,22 @@ public class MulticastSend {
     MulticastSocket ms = null;
     InetAddress group = null;
     Recurso r;
-    
+    /**
+     * Classe responsável por enviar mensagem via broadcast
+     * @param recurso
+     * @throws UnknownHostException
+     * @throws IOException 
+     */
     public MulticastSend(Recurso recurso) throws UnknownHostException, IOException {
         this.r = recurso;
         group = InetAddress.getByName(r.ipAddress);
         ms = new MulticastSocket(r.port);
         ms.joinGroup(group);
     }
-    
+    /**
+     * Método de enviar mensagem
+     * @param mensagem 
+     */
     public void EnviarMensagem(String mensagem){
             r.setMensagem(mensagem);
             byte[] m = mensagem.getBytes();

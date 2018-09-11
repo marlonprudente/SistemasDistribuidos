@@ -23,7 +23,11 @@ public class ThreadMulticastReceive extends Thread {
     String nomeProcesso = "";
     Recurso r;
     Integer counter;
-
+/**
+ * Thread de recebimento de mensagens
+ * @param r
+ * @throws IOException 
+ */
     public ThreadMulticastReceive(Recurso r) throws IOException {
         this.r = r;
         this.counter = 1;
