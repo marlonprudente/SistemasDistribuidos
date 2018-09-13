@@ -80,12 +80,12 @@ public class MessageManager extends Thread {
         //da própria aplicação, aguarda as outras aplicações responderem
         } else if (nomeComando.startsWith("Recurso1Livre")) {
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
+                r.setlistaRespostas(nomeProcesso);
                 if (r.getDesejoRecurso1()) {
-                    r.setListaRecurso1(nomeProcesso, Boolean.FALSE);
-                    r.setlistaRespostas(nomeProcesso);
+                    r.setListaRecurso1(nomeProcesso, Boolean.FALSE);                    
                     if(!r.getThreadRecurso1()){
                        r.setThreadRecurso1(true);
-                      ThreadTimer tt = new ThreadTimer(r);
+                      ThreadTimer tt = new ThreadTimer(r,"Recurso1");
                       tt.start();
                     }
                     if (!r.getListaRecurso1().values().contains(true)) {

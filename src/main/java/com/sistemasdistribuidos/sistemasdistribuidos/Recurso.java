@@ -75,7 +75,7 @@ public class Recurso implements Serializable {
     }
 
     public void setlistaProcessos(String processo) {
-        if (!listaProcessos.contains(processo) && !processo.equals(this.nomeProcesso)) {
+        if (!listaProcessos.contains(processo) && !processo.startsWith(this.nomeProcesso)) {
             listaProcessos.add(processo);
             processosRecurso1.put(processo, false);
             processosRecurso2.put(processo, false);
@@ -83,7 +83,7 @@ public class Recurso implements Serializable {
     }
 
     public void setlistaRespostas(String processo) {
-        if (!listaProcessos.contains(processo) && !processo.equals(this.nomeProcesso)) {
+        if (!listaProcessos.contains(processo) && !processo.startsWith(this.nomeProcesso)) {
             listaRespostas.add(processo);
         }
     }
