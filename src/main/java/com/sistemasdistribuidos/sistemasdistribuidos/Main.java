@@ -68,6 +68,7 @@ public class Main {
                     break;
                 case 2:
                     mensagem = nomeProcesso + ":getRecurso1";
+                    System.out.println("Thread: " + r.getThreadRecurso1());
                      if(!r.getThreadRecurso1()){
                        r.setThreadRecurso1(true);
                       ThreadTimer tt = new ThreadTimer(r,"Recurso1");
@@ -103,10 +104,14 @@ public class Main {
                 case 8:
                     System.out.println("Soltar Recurso1");
                     r.setRecurso1(false);
+                    r.setDesejoRecurso1(false);
+                    r.setThreadRecurso1(false);
                     break;
                 case 9:
                     System.out.println("Soltar Recurso2");
                     r.setRecurso2(false);
+                    r.setDesejoRecurso2(false);
+                    r.setThreadRecurso2(false);
                     break;
                 case 10:
                     List<String> lista2 = r.getlistaRespostas();

@@ -25,7 +25,7 @@ public class Recurso implements Serializable {
     private boolean desejoRecurso1 = false;
     private boolean desejoRecurso2 = false;
     private final List<String> listaProcessos = new ArrayList<>();
-    private final List<String> listaRespostas = new ArrayList<>();
+    private List<String> listaRespostas = new ArrayList<>();
     private boolean threadRecurso1 = false;
     private boolean threadRecurso2 = false;
     private final Map<String, Boolean> processosRecurso1 = new HashMap<String, Boolean>();
@@ -90,6 +90,7 @@ public class Recurso implements Serializable {
     
     public synchronized void limparListaRespostas(){
         this.listaRespostas.clear();
+        this.listaRespostas = new ArrayList<>();
     }
 
     public List<String> getlistaRespostas() {
@@ -145,7 +146,7 @@ public class Recurso implements Serializable {
     }
 
     public synchronized void setThreadRecurso1(boolean threadRecurso) {
-        threadRecurso1 = threadRecurso;
+        this.threadRecurso1 = threadRecurso;
     }
 
     public synchronized boolean getThreadRecurso2() {
