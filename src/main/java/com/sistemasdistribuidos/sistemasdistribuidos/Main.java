@@ -21,9 +21,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         /**
-         Inicializaçãoi das variáveis
-         * Todas as variáveis são iniciadas e alocadas no <b>"Recurso"</b> que é a variável
-         * que armazena todas as informações da aplicação.
+         * Inicializaçãoi das variáveis Todas as variáveis são iniciadas e
+         * alocadas no <b>"Recurso"</b> que é a variável que armazena todas as
+         * informações da aplicação.
          */
         Scanner scan = new Scanner(System.in);
         Integer op;
@@ -50,7 +50,7 @@ public class Main {
          */
         ThreadMulticastReceive tmr = new ThreadMulticastReceive(r);
 //        ThreadMulticastSend tms = new ThreadMulticastSend(r);
-        tmr.start();        
+        tmr.start();
 //        tms.start();
 
         //Variável que irá controlar as mensagens a serem enviadas.
@@ -68,11 +68,11 @@ public class Main {
                     break;
                 case 2:
                     mensagem = nomeProcesso + ":getRecurso1";
-                    System.out.println("Thread: " + r.getThreadRecurso1());
-                     if(!r.getThreadRecurso1()){
-                       r.setThreadRecurso1(true);
-                      ThreadTimer tt = new ThreadTimer(r,"Recurso1");
-                      tt.start();
+                    System.out.println("ThreadR1: " + r.getThreadRecurso1());
+                    if (!r.getThreadRecurso1()) {
+                        r.setThreadRecurso1(true);
+                        ThreadTimer tt = new ThreadTimer(r, "Recurso1");
+                        tt.start();
                     }
                     r.setDesejoRecurso1(true);
                     m = mensagem.getBytes();
@@ -80,6 +80,12 @@ public class Main {
                     break;
                 case 3:
                     mensagem = nomeProcesso + ":getRecurso2";
+                    System.out.println("ThreadR2: " + r.getThreadRecurso2());
+                    if (!r.getThreadRecurso2()) {
+                        r.setThreadRecurso2(true);
+                        ThreadTimer tt = new ThreadTimer(r, "Recurso1");
+                        tt.start();
+                    }
                     r.setDesejoRecurso2(true);
                     m = mensagem.getBytes();
                     enviar = true;
@@ -122,7 +128,7 @@ public class Main {
                 default:
                     System.out.println("Opção Inválida");
             }
-            
+
             //Enviar mensagem via broadcast.
             if (enviar) {
                 DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
