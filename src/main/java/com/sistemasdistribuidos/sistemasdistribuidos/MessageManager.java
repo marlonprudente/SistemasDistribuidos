@@ -78,22 +78,26 @@ public class MessageManager extends Thread {
         } else if (nomeComando.startsWith("estouSaindo")) {
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 System.out.println("RemovendoDaLista");
-                r.removeListaProcesso(nomeProcesso);
                 r.removeListaRecurso1(nomeProcesso);
                 r.removeListaRecurso2(nomeProcesso);
+                r.removeListaProcesso(nomeProcesso);
             }
             //Trata informação de que recurso está livre, e caso o pedido tenha partido
             //da própria aplicação, aguarda as outras aplicações responderem
         } else if (nomeComando.startsWith("Recurso1Livre")) {
             r.setlistaRespostas(nomeProcesso);
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
-
                 if (r.getDesejoRecurso1()) {
                     r.setListaRecurso1(nomeProcesso, Boolean.FALSE);
+                    for(String teste  : r.getListaRecurso1().keySet()){
+                        System.out.println("Lista procR1 ==> " + teste);
+                    }
                     if (!r.getListaRecurso1().values().contains(true)) {
                         r.setRecurso1(true);
                     }
                 }
+            }else if(r.getlistaProcessos().isEmpty()){
+                r.setRecurso1(true);
             }
             //Trata a informação de que outra aplicação está com o recurso, 
             //atualizando a lista de recursos
@@ -105,18 +109,25 @@ public class MessageManager extends Thread {
             //Trata informação de que recurso está livre, e caso o pedido tenha partido
             //da própria aplicação, aguarda as outras aplicações responderem
         } else if (nomeComando.startsWith("Recurso2Livre")) {
+            r.setlistaRespostas(nomeProcesso);
             //tratar se é solicitação do processo ou não
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 if (r.getDesejoRecurso2()) {
                     r.setListaRecurso2(nomeProcesso, Boolean.FALSE);
+                    for(String teste  : r.getListaRecurso2().keySet()){
+                        System.out.println("Lista procR1 ==> " + teste);
+                    }
                     if (!r.getListaRecurso2().values().contains(true)) {
                         r.setRecurso2(true);
                     }
                 }
+            }else if(r.getlistaProcessos().isEmpty()){
+                r.setRecurso2(true);
             }
             //Trata a informação de que outra aplicação está com o recurso, 
             //atualizando a lista de recursos
         } else if (nomeComando.startsWith("Recurso2Preso")) {
+            r.setlistaRespostas(nomeProcesso);
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 r.setListaRecurso2(nomeProcesso, Boolean.TRUE);
             }

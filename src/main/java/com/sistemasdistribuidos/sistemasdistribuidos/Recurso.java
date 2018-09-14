@@ -90,7 +90,6 @@ public class Recurso implements Serializable {
     
     public synchronized void limparListaRespostas(){
         this.listaRespostas.clear();
-        this.listaRespostas = new ArrayList<>();
     }
 
     public List<String> getlistaRespostas() {

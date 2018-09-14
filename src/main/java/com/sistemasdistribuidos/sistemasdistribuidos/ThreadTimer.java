@@ -34,7 +34,7 @@ public class ThreadTimer extends Thread {
 
     @Override
     public void run() {
-
+        r.limparListaRespostas();
         Timer timer = new Timer("MyTimer");//create a new timer
         timer.scheduleAtFixedRate(timerTask, 0, 60000);//start timer in 30ms to increment  counter
         //cancel after sometime
@@ -46,33 +46,50 @@ public class ThreadTimer extends Thread {
         timer.cancel();
         System.out.println("TimerTask cancelled");
 
-        if (r.getlistaProcessos().size() !=  r.getlistaRespostas().size()) {
+        if (r.getlistaProcessos().size() != r.getlistaRespostas().size()) {
             System.out.println("Entrei na comparação das listas.");
-            
+
             Iterator<String> it = r.getlistaProcessos().iterator();
-            
+
             while (it.hasNext()) {
                 String iterator = it.next();
                 System.out.println("Iterator: " + iterator);
                 if (!r.getlistaRespostas().contains(iterator)) {
-                    
-
-                    //não tem o elemento, remover
-                    System.out.println("Não tem o elemento.");
-                    r.removeListaProcesso(iterator);
-                    r.removeListaRecurso1(iterator);
-                    r.removeListaRecurso2(iterator);
-                    System.out.println("Removerei o " + iterator + "por inatividade.");
-                    if (this.nomeRecurso.startsWith("Recurso1")) {
-                        r.setThreadRecurso1(false);
-                    }
-                    if (this.nomeRecurso.startsWith("Recurso2")) {
-                        r.setThreadRecurso2(false);
+                    try {
+                        //não tem o elemento, remover
+                        System.out.println("Não tem o elemento ");
+                        r.removeListaRecurso1(iterator);
+                        r.removeListaRecurso2(iterator);
+                        r.removeListaProcesso(iterator);
+                        System.out.println("Removi o " + iterator + " por inatividade.");
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e);
+                    } finally {
+                        if (this.nomeRecurso.startsWith("Recurso1")) {
+                            r.setThreadRecurso1(false);
+                        }
+                        if (this.nomeRecurso.startsWith("Recurso2")) {
+                            r.setThreadRecurso2(false);
+                        }
+                        r.limparListaRespostas();
+                        this.interrupt();
                     }
                 }
             }
-            r.limparListaRespostas();
+
         }
+
+//        for (String teste : r.getlistaRespostas()) {
+//            System.out.println("respostas de: " + teste);
+//        }
+        if (this.nomeRecurso.startsWith("Recurso1")) {
+            r.setThreadRecurso1(false);
+        }
+        if (this.nomeRecurso.startsWith("Recurso2")) {
+            r.setThreadRecurso2(false);
+        }
+        r.limparListaRespostas();
         this.interrupt();
+
     }
 }
