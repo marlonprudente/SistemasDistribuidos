@@ -79,15 +79,11 @@ public class MessageManager extends Thread {
         //Trata informação de que recurso está livre, e caso o pedido tenha partido
         //da própria aplicação, aguarda as outras aplicações responderem
         } else if (nomeComando.startsWith("Recurso1Livre")) {
+            r.setlistaRespostas(nomeProcesso);
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
-                r.setlistaRespostas(nomeProcesso);
+
                 if (r.getDesejoRecurso1()) {
-                    r.setListaRecurso1(nomeProcesso, Boolean.FALSE);                    
-                    if(!r.getThreadRecurso1()){
-                       r.setThreadRecurso1(true);
-                      ThreadTimer tt = new ThreadTimer(r,"Recurso1");
-                      tt.start();
-                    }
+                    r.setListaRecurso1(nomeProcesso, Boolean.FALSE);
                     if (!r.getListaRecurso1().values().contains(true)) {
                         r.setRecurso1(true);
                     }
@@ -96,6 +92,7 @@ public class MessageManager extends Thread {
             //Trata a informação de que outra aplicação está com o recurso, 
             //atualizando a lista de recursos
         } else if (nomeComando.startsWith("Recurso1Preso")) {
+            r.setlistaRespostas(nomeProcesso);
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 r.setListaRecurso1(nomeProcesso, Boolean.TRUE);
             }

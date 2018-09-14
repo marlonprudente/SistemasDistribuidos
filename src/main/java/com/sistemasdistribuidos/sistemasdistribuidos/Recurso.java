@@ -83,14 +83,18 @@ public class Recurso implements Serializable {
     }
 
     public void setlistaRespostas(String processo) {
-        if (!listaProcessos.contains(processo) && !processo.startsWith(this.nomeProcesso)) {
+        if (!listaRespostas.contains(processo) && !processo.startsWith(this.nomeProcesso)) {
             listaRespostas.add(processo);
         }
+    }
+    
+    public synchronized void limparListaRespostas(){
+        this.listaRespostas.clear();
     }
 
     public List<String> getlistaRespostas() {
         return listaRespostas;
-    }
+    }  
 
     public Map<String, Boolean> getListaRecurso1() {
         return this.processosRecurso1;
@@ -136,19 +140,19 @@ public class Recurso implements Serializable {
         this.mensagem = msgm;
     }
 
-    public boolean getThreadRecurso1() {
+    public synchronized boolean getThreadRecurso1() {
         return threadRecurso1;
     }
 
-    public void setThreadRecurso1(boolean threadRecurso) {
+    public synchronized void setThreadRecurso1(boolean threadRecurso) {
         threadRecurso1 = threadRecurso;
     }
 
-    public boolean getThreadRecurso2() {
+    public synchronized boolean getThreadRecurso2() {
         return threadRecurso2;
     }
 
-    public void setThreadRecurso2(boolean threadRecurso) {
+    public synchronized void setThreadRecurso2(boolean threadRecurso) {
         threadRecurso2 = threadRecurso;
     }
 

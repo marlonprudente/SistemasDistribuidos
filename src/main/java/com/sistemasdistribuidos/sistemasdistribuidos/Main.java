@@ -68,6 +68,11 @@ public class Main {
                     break;
                 case 2:
                     mensagem = nomeProcesso + ":getRecurso1";
+                     if(!r.getThreadRecurso1()){
+                       r.setThreadRecurso1(true);
+                      ThreadTimer tt = new ThreadTimer(r,"Recurso1");
+                      tt.start();
+                    }
                     r.setDesejoRecurso1(true);
                     m = mensagem.getBytes();
                     enviar = true;
@@ -102,6 +107,12 @@ public class Main {
                 case 9:
                     System.out.println("Soltar Recurso2");
                     r.setRecurso2(false);
+                    break;
+                case 10:
+                    List<String> lista2 = r.getlistaRespostas();
+                    lista2.forEach((l) -> {
+                        System.out.println("Respostas:>" + l);
+                    });
                     break;
                 default:
                     System.out.println("Opção Inválida");

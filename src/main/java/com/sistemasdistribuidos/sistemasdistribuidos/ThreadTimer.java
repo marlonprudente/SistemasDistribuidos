@@ -17,7 +17,6 @@ import java.util.TimerTask;
 public class ThreadTimer extends Thread {
 
     TimerTask timerTask;
-    Integer counter = 0;
     Recurso r;
     String nomeRecurso;
 
@@ -28,8 +27,7 @@ public class ThreadTimer extends Thread {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("TimerTask executing counter is: " + counter);
-                counter++;
+                System.out.println("TimerTask executing recurso is: " + nomeRecurso);
             }
         };
     }
@@ -41,32 +39,39 @@ public class ThreadTimer extends Thread {
         timer.scheduleAtFixedRate(timerTask, 0, 60000);//start timer in 30ms to increment  counter
         //cancel after sometime
         try {
-            Thread.sleep(30000); //Trinta segundos
+            Thread.sleep(5000); //Trinta segundos
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         timer.cancel();
         System.out.println("TimerTask cancelled");
 
-        if (r.getlistaProcessos().size() != r.getlistaRespostas().size()) {
+        if (r.getlistaProcessos().size() !=  r.getlistaRespostas().size()) {
+            System.out.println("Entrei na comparação das listas.");
             
             Iterator<String> it = r.getlistaProcessos().iterator();
+            
             while (it.hasNext()) {
-                if (!r.getlistaRespostas().contains(it.next())) {
+                String iterator = it.next();
+                System.out.println("Iterator: " + iterator);
+                if (!r.getlistaRespostas().contains(iterator)) {
+                    
+
                     //não tem o elemento, remover
-                    r.removeListaProcesso(it.next());
-                    r.removeListaRecurso1(it.next());
-                    r.removeListaRecurso2(it.next());
-                    System.out.println("Removerei o " + it.next() + "por inatividade.");
+                    System.out.println("Não tem o elemento.");
+                    r.removeListaProcesso(iterator);
+                    r.removeListaRecurso1(iterator);
+                    r.removeListaRecurso2(iterator);
+                    System.out.println("Removerei o " + iterator + "por inatividade.");
                     if (this.nomeRecurso.startsWith("Recurso1")) {
                         r.setThreadRecurso1(false);
                     }
                     if (this.nomeRecurso.startsWith("Recurso2")) {
                         r.setThreadRecurso2(false);
                     }
-
                 }
             }
+            r.limparListaRespostas();
         }
         this.interrupt();
     }
