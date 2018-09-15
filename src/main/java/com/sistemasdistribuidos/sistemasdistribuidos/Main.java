@@ -11,6 +11,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -29,7 +30,7 @@ public class Main {
         Integer op;
         String ipAddress = "224.42.42.42";
         Integer port = 6789;
-        String nomeProcesso = "Process3";
+        String nomeProcesso = "Process1";
         String mensagem = "apresentacao";
         byte[] m;
         MulticastSocket ms = null;
@@ -44,7 +45,7 @@ public class Main {
         /**
          * Seta a mensagem inicial como apresentação.
          */
-        r.setMensagem(nomeProcesso + ":apresentacao");
+        r.setMensagem(nomeProcesso + ":apresentacao:");
         /**
          * Inicia a Thread que irá ficar escutando mensagens.
          */
@@ -59,15 +60,22 @@ public class Main {
         //loop para teste de funcionalidades
         while (true) {
             System.out.println("Digite a opção desejada: ");
+            System.out.println("1 - Apresentação ");
+            System.out.println("2 - Obter Recurso 1");
+            System.out.println("3 - Obter Recurso 2");
+            System.out.println("4 - Ver lista de Processos");
+            System.out.println("5 - Sair");
+            System.out.println("6 - Soltar Recurso 1");
+            System.out.println("7 - Soltar Recurso 2");
             op = scan.nextInt();
             switch (op) {
                 case 1:
-                    mensagem = nomeProcesso + ":apresentacao";
+                    mensagem = nomeProcesso + ":apresentacao:";
                     m = mensagem.getBytes();
                     enviar = true;
                     break;
                 case 2:
-                    mensagem = nomeProcesso + ":getRecurso1";
+                    mensagem = nomeProcesso + ":getRecurso1:";
                     System.out.println("ThreadR1: " + r.getThreadRecurso1());
                     if (!r.getThreadRecurso1()) {
                         r.setThreadRecurso1(true);
@@ -79,7 +87,7 @@ public class Main {
                     enviar = true;
                     break;
                 case 3:
-                    mensagem = nomeProcesso + ":getRecurso2";
+                    mensagem = nomeProcesso + ":getRecurso2:";
                     System.out.println("ThreadR2: " + r.getThreadRecurso2());
                     if (!r.getThreadRecurso2()) {
                         r.setThreadRecurso2(true);
@@ -91,39 +99,38 @@ public class Main {
                     enviar = true;
                     break;
                 case 4:
-                    System.out.println(":>" + r.getMensagem());
-                    break;
-                case 5:
                     List<String> lista = r.getlistaProcessos();
                     lista.forEach((l) -> {
                         System.out.println(":>" + l);
                     });
                     break;
-                case 6:
-                    r.setMensagem(nomeProcesso + ":exit()");
-                    break;
-                case 7:
-                    mensagem = nomeProcesso + ":estouSaindo";
+                case 5:
+                    mensagem = nomeProcesso + ":estouSaindo:";
                     m = mensagem.getBytes();
                     enviar = true;
                     break;
-                case 8:
+                case 6:
                     System.out.println("Soltar Recurso1");
+                    Map.Entry<String,Boolean> r1 = r.getListaRecurso1().entrySet().iterator().next();
                     r.setRecurso1(false);
                     r.setDesejoRecurso1(false);
                     r.setThreadRecurso1(false);
+                    mensagem = nomeProcesso + ":Recurso1Livre:" + r1.getKey();
+                     m = mensagem.getBytes();
+                    System.out.println("Mensagem: " + mensagem);
+                    enviar = true;
+                    r.removeListaRecurso1(r1.getKey());
                     break;
-                case 9:
+                case 7:
                     System.out.println("Soltar Recurso2");
+                    Map.Entry<String,Boolean> r2 = r.getListaRecurso2().entrySet().iterator().next();
                     r.setRecurso2(false);
                     r.setDesejoRecurso2(false);
                     r.setThreadRecurso2(false);
-                    break;
-                case 10:
-                    List<String> lista2 = r.getlistaRespostas();
-                    lista2.forEach((l) -> {
-                        System.out.println("Respostas:>" + l);
-                    });
+                    mensagem = nomeProcesso + ":Recurso2Livre:" + r2.getKey();
+                    m = mensagem.getBytes();
+                    enviar = true;
+                    r.removeListaRecurso1(r2.getKey());
                     break;
                 default:
                     System.out.println("Opção Inválida");
@@ -131,7 +138,7 @@ public class Main {
 
             //Enviar mensagem via broadcast.
             if (enviar) {
-                DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
+                DatagramPacket messageOut = new DatagramPacket(m, m.length, group, port);
                 try {
                     ms.send(messageOut);
                 } catch (IOException ex) {
