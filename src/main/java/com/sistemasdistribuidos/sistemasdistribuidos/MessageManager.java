@@ -6,6 +6,7 @@
 package com.sistemasdistribuidos.sistemasdistribuidos;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  *
@@ -49,7 +50,7 @@ public class MessageManager extends Thread {
         if (nomeComando == null) {
             nomeComando = "apresentacao";
         }
-        if (nomeDestinatario == null) {
+        if (nomeDestinatario == null || nomeDestinatario.startsWith("")) {
             nomeDestinatario = "";
         }
 
@@ -94,15 +95,23 @@ public class MessageManager extends Thread {
             r.setlistaRespostas(nomeProcesso);
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 if (r.getDesejoRecurso1()) {
+                    System.out.println("Destinatario: " + nomeDestinatario);
                     if(nomeDestinatario.startsWith(r.nomeProcesso)){
-                        System.out.println("Entrei no nomeDestinatario");
-                        r.setListaRecurso1(nomeProcesso, Boolean.FALSE);
-                    }else{
-                        System.out.println("Fui pro outro caso no nomeDestinatario");
+                        System.out.println("Recurso Preso");
                         r.setListaRecurso1(nomeProcesso, Boolean.TRUE);
-                    }                    
-                    if (!r.getListaRecurso1().values().contains(true)) {
-                        r.setRecurso1(true);
+                    }else{
+                        System.out.println("Recurso Livre");
+                        r.setListaRecurso1(nomeProcesso, Boolean.FALSE);
+                    }
+                     Iterator<String> it = r.getListaRecurso1().keySet().iterator();
+                     while(it.hasNext()){
+                         String item = it.next();
+                         System.out.print("item " + item + " ");
+                         System.out.println("valor: " + r.getListaRecurso1().get(item));
+                     }
+                    if (!r.getListaRecurso1().values().contains(Boolean.TRUE)) {
+                        System.out.println("Entrei Recurso1 = true");
+                        r.setRecurso1(Boolean.TRUE);
                     }
                 }
             } else if (r.getlistaProcessos().isEmpty()) {
