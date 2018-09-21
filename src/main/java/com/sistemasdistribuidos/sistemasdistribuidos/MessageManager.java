@@ -64,25 +64,25 @@ public class MessageManager extends Thread {
         } else if (nomeComando.startsWith("getRecurso1")) {
             if (r.getRecurso1()) {
                 System.out.println("R1Preso");
-                r.adicionarProcessoAguardandoRecurso1(nomeProcesso);
+                
                 enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso1Preso:");
             } else {
                 System.out.println("R1Livre");
                 enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso1Livre:");
             }
-
+            r.adicionarProcessoAguardandoRecurso1(nomeProcesso);
             //Trata o pedido de recurso, se a aplicação não possui o recurso, informa que o mesmo está livre
             //Caso contrário, informa que está preso.
         } else if (nomeComando.startsWith("getRecurso2")) {
 
             if (r.getRecurso2()) {
-                System.out.println("R2Preso");
-                r.adicionarProcessoAguardandoRecurso2(nomeProcesso);
+                System.out.println("R2Preso");                
                 enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso2Preso:");
             } else {
                 System.out.println("R2Livre");
                 enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso2Livre:");
             }
+            r.adicionarProcessoAguardandoRecurso2(nomeProcesso);
             //Trata informação de que está saindo, removendo o mesmo das listas.
         } else if (nomeComando.startsWith("estouSaindo")) {
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
