@@ -49,6 +49,7 @@ public class ThreadMulticastReceive extends Thread {
                 System.out.println("Recebi: " + mensagem);
                 MessageManager mm = new MessageManager(r,mensagem);
                 mm.start();
+                mensagem = "";
             } catch (IOException e) {
                 System.out.println("" + e);
             }

@@ -39,7 +39,7 @@ public class ThreadTimer extends Thread {
         timer.scheduleAtFixedRate(timerTask, 0, 60000);//start timer in 30ms to increment  counter
         //cancel after sometime
         try {
-            Thread.sleep(5000); //Trinta segundos
+            Thread.sleep(5000); //cinco segundos
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

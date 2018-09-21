@@ -26,6 +26,8 @@ public class Recurso implements Serializable {
     private boolean desejoRecurso2 = false;
     private final List<String> listaProcessos = new ArrayList<>();
     private List<String> listaRespostas = new ArrayList<>();
+    private List<String> listaAguardandoRecurso1 = new ArrayList<>();
+    private List<String> listaAguardandoRecurso2 = new ArrayList<>();
     private boolean threadRecurso1 = false;
     private boolean threadRecurso2 = false;
     private final Map<String, Boolean> processosRecurso1 = new HashMap<String, Boolean>();
@@ -87,14 +89,14 @@ public class Recurso implements Serializable {
             listaRespostas.add(processo);
         }
     }
-    
-    public synchronized void limparListaRespostas(){
+
+    public synchronized void limparListaRespostas() {
         this.listaRespostas.clear();
     }
 
     public List<String> getlistaRespostas() {
         return listaRespostas;
-    }  
+    }
 
     public Map<String, Boolean> getListaRecurso1() {
         return this.processosRecurso1;
@@ -156,4 +158,35 @@ public class Recurso implements Serializable {
         threadRecurso2 = threadRecurso;
     }
 
+    public synchronized void adicionarProcessoAguardandoRecurso1(String processo) {
+        if (!listaAguardandoRecurso1.contains(processo) && !processo.startsWith(this.nomeProcesso)) {
+            listaAguardandoRecurso1.add(processo);
+        }
+    }
+
+    public synchronized void removeProcessoAguardandoRecurso1(String processo) {
+        if (listaAguardandoRecurso1.contains(processo)) {
+            listaAguardandoRecurso1.remove(processo);
+        }
+    }
+
+    public List<String> getProcessoAguardadoRecurso1() {
+        return this.listaAguardandoRecurso1;
+    }
+
+    public synchronized void adicionarProcessoAguardandoRecurso2(String processo) {
+        if (!listaAguardandoRecurso2.contains(processo) && !processo.startsWith(this.nomeProcesso)) {
+            listaAguardandoRecurso2.add(processo);
+        }
+    }
+
+    public synchronized void removeProcessoAguardandoRecurso2(String processo) {
+        if (listaAguardandoRecurso2.contains(processo)) {
+            listaAguardandoRecurso2.remove(processo);
+        }
+    }
+
+    public List<String> getProcessoAguardadoRecurso2() {
+        return this.listaAguardandoRecurso1;
+    }
 }

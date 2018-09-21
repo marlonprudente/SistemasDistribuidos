@@ -30,7 +30,7 @@ public class Main {
         Integer op;
         String ipAddress = "224.42.42.42";
         Integer port = 6789;
-        String nomeProcesso = "Process1";
+        String nomeProcesso = "Process3";
         String mensagem = "apresentacao";
         byte[] m;
         MulticastSocket ms = null;
@@ -59,7 +59,7 @@ public class Main {
         boolean enviar = true;
         //loop para teste de funcionalidades
         while (true) {
-            System.out.println("Digite a opção desejada: ");
+            System.out.println(nomeProcesso + ">Digite a opção desejada: ");
             System.out.println("1 - Apresentação ");
             System.out.println("2 - Obter Recurso 1");
             System.out.println("3 - Obter Recurso 2");
@@ -111,26 +111,23 @@ public class Main {
                     break;
                 case 6:
                     System.out.println("Soltar Recurso1");
-                    Map.Entry<String,Boolean> r1 = r.getListaRecurso1().entrySet().iterator().next();
                     r.setRecurso1(false);
                     r.setDesejoRecurso1(false);
                     r.setThreadRecurso1(false);
-                    mensagem = nomeProcesso + ":Recurso1Livre:" + r1.getKey();
+                    mensagem = nomeProcesso + ":Recurso1Livre:" + r.getProcessoAguardadoRecurso1().get(0);
+                    r.removeProcessoAguardandoRecurso1(r.getProcessoAguardadoRecurso1().get(0));
                      m = mensagem.getBytes();
-                    System.out.println("Mensagem: " + mensagem);
                     enviar = true;
-                    r.removeListaRecurso1(r1.getKey());
                     break;
                 case 7:
                     System.out.println("Soltar Recurso2");
-                    Map.Entry<String,Boolean> r2 = r.getListaRecurso2().entrySet().iterator().next();
                     r.setRecurso2(false);
                     r.setDesejoRecurso2(false);
                     r.setThreadRecurso2(false);
-                    mensagem = nomeProcesso + ":Recurso2Livre:" + r2.getKey();
+                    mensagem = nomeProcesso + ":Recurso2Livre:" + r.getProcessoAguardadoRecurso2().get(0);
+                    r.removeProcessoAguardandoRecurso2(r.getProcessoAguardadoRecurso2().get(0));
                     m = mensagem.getBytes();
                     enviar = true;
-                    r.removeListaRecurso1(r2.getKey());
                     break;
                 default:
                     System.out.println("Opção Inválida");

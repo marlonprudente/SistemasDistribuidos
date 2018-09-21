@@ -64,6 +64,7 @@ public class MessageManager extends Thread {
         } else if (nomeComando.startsWith("getRecurso1")) {
             if (r.getRecurso1()) {
                 System.out.println("R1Preso");
+                r.adicionarProcessoAguardandoRecurso1(nomeProcesso);
                 enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso1Preso:");
             } else {
                 System.out.println("R1Livre");
@@ -76,6 +77,7 @@ public class MessageManager extends Thread {
 
             if (r.getRecurso2()) {
                 System.out.println("R2Preso");
+                r.adicionarProcessoAguardandoRecurso2(nomeProcesso);
                 enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso2Preso:");
             } else {
                 System.out.println("R2Livre");
@@ -96,27 +98,19 @@ public class MessageManager extends Thread {
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 if (r.getDesejoRecurso1()) {
                     System.out.println("Destinatario: " + nomeDestinatario);
-                    if(nomeDestinatario.startsWith(r.nomeProcesso)){
+                    if(!nomeProcesso.startsWith(r.nomeProcesso) ){
                         System.out.println("Recurso Preso");
-                        r.setListaRecurso1(nomeProcesso, Boolean.TRUE);
-                    }else{
-                        System.out.println("Recurso Livre");
                         r.setListaRecurso1(nomeProcesso, Boolean.FALSE);
                     }
-                     Iterator<String> it = r.getListaRecurso1().keySet().iterator();
-                     while(it.hasNext()){
-                         String item = it.next();
-                         System.out.print("item " + item + " ");
-                         System.out.println("valor: " + r.getListaRecurso1().get(item));
-                     }
-                    if (!r.getListaRecurso1().values().contains(Boolean.TRUE)) {
-                        System.out.println("Entrei Recurso1 = true");
+                    if (!r.getListaRecurso1().values().contains(Boolean.TRUE) && (r.getlistaRespostas().size() == r.getlistaProcessos().size())) {
+                        System.out.println("Entrei na condição de que ninguem tem o recurso.");
                         r.setRecurso1(Boolean.TRUE);
+                        enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso1Preso:");
                     }
                 }
             } else if (r.getlistaProcessos().isEmpty()) {
                 r.setRecurso1(true);
-            } else if (nomeDestinatario.startsWith(r.nomeProcesso)) {
+            } else if (nomeDestinatario.startsWith(r.nomeProcesso) && nomeDestinatario.equalsIgnoreCase(r.nomeProcesso)) {
                 System.out.println("Recebi o recurso de " + nomeProcesso);
                 if (!r.getListaRecurso1().values().contains(true)) {
                     r.setRecurso1(true);
@@ -134,23 +128,27 @@ public class MessageManager extends Thread {
             //da própria aplicação, aguarda as outras aplicações responderem
         } else if (nomeComando.startsWith("Recurso2Livre")) {
             r.setlistaRespostas(nomeProcesso);
-            //tratar se é solicitação do processo ou não
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 if (r.getDesejoRecurso2()) {
-                    r.setListaRecurso2(nomeProcesso, Boolean.FALSE);
-                    if (!r.getListaRecurso2().values().contains(true)) {
-                        r.setRecurso2(true);
+                    System.out.println("Destinatario: " + nomeDestinatario);
+                    if(!nomeProcesso.startsWith(r.nomeProcesso) ){
+                        System.out.println("Recurso Preso");
+                        r.setListaRecurso2(nomeProcesso, Boolean.FALSE);
+                    }
+                    if (!r.getListaRecurso2().values().contains(Boolean.TRUE) && (r.getlistaRespostas().size() == r.getlistaProcessos().size())) {
+                        System.out.println("Entrei na condição de que ninguem tem o recurso.");
+                        r.setRecurso2(Boolean.TRUE);
+                        enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso2Preso:");
                     }
                 }
             } else if (r.getlistaProcessos().isEmpty()) {
                 r.setRecurso2(true);
-            } else if (nomeDestinatario.startsWith(r.nomeProcesso)) {
+            } else if (nomeDestinatario.startsWith(r.nomeProcesso) && nomeDestinatario.equalsIgnoreCase(r.nomeProcesso)) {
                 System.out.println("Recebi o recurso de " + nomeProcesso);
                 if (!r.getListaRecurso2().values().contains(true)) {
                     r.setRecurso2(true);
                     enviarMensagem.EnviarMensagem(r.nomeProcesso + ":Recurso2Preso:");
                 }
-
             }
             //Trata a informação de que outra aplicação está com o recurso, 
             //atualizando a lista de recursos
@@ -159,11 +157,9 @@ public class MessageManager extends Thread {
             if (!nomeProcesso.startsWith(r.nomeProcesso)) {
                 r.setListaRecurso2(nomeProcesso, Boolean.TRUE);
             }
-
         } else {
             System.out.println("Não entrei em nenhuma opcao");
         }
-
         this.interrupt();
     }
 }
